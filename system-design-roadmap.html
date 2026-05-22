@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Design — Zero to Hero · A 2026 roadmap for CS graduates</title>
+<meta name="description" content="A 6-month, 7-phase system design roadmap calibrated for CS graduates. No fluff, no prerequisites, no filler.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F2EDE0;
+    --bg-card: #FAF6E9;
+    --ink: #1F1B16;
+    --ink-2: #4A453C;
+    --ink-3: #746E62;
+    --rule: #D9D2BF;
+    --accent: #8E2A1C;
+    --accent-soft: #F0DCD7;
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15110D;
+      --bg-card: #1F1A14;
+      --ink: #EDE6D6;
+      --ink-2: #C7BFAC;
+      --ink-3: #8A8475;
+      --rule: #322B22;
+      --accent: #E5704A;
+      --accent-soft: #2F1A12;
+    }
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 18px;
+    line-height: 1.65;
+    font-feature-settings: "kern", "liga", "calt";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 80px 40px 120px; }
+
+  /* HERO */
+  .hero { margin-bottom: 80px; }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-3);
+    margin-bottom: 40px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(56px, 10vw, 124px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0 0 36px;
+    color: var(--ink);
+    font-feature-settings: "ss01";
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+  .hero .lede {
+    font-family: var(--body);
+    font-size: 21px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 640px;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  /* TOC */
+  .toc {
+    margin: 64px 0 0;
+    padding: 32px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .toc-h {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    margin: 0 0 24px;
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 32px;
+  }
+  .toc-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .toc-list a {
+    color: var(--ink);
+    text-decoration: none;
+    font-family: var(--body);
+    font-size: 17px;
+    flex: 1;
+    transition: color .15s;
+  }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list .toc-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+  .toc-list .toc-dur {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.08em;
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 56px 0 24px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .stat {
+    padding: 28px 24px 24px;
+    border-right: 1px solid var(--rule);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-l {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+    margin: 0 0 14px;
+  }
+  .stat-v {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 44px;
+    line-height: 1;
+    margin: 0;
+    color: var(--ink);
+    font-feature-settings: "lnum";
+    letter-spacing: -0.02em;
+  }
+  .stat-v small {
+    font-size: 16px;
+    color: var(--ink-3);
+    margin-left: 4px;
+    font-weight: 400;
+  }
+
+  /* INTRO PROSE */
+  .preface {
+    margin: 96px 0 32px;
+    padding: 0;
+  }
+  .preface h2 {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    color: var(--accent);
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+  }
+  .preface p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    max-width: 680px;
+    margin: 0 0 18px;
+  }
+
+  /* PHASE */
+  .phase {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 56px;
+    padding: 96px 0 80px;
+    border-top: 1px solid var(--rule);
+  }
+  .phase:first-of-type { border-top: 2px solid var(--ink); }
+  .p-num {
+    margin: 0;
+    color: var(--accent);
+  }
+  .p-num .n {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 132px;
+    line-height: 0.82;
+    display: block;
+    letter-spacing: -0.04em;
+    font-feature-settings: "lnum";
+  }
+  .p-num .label {
+    display: block;
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .p-content > h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.08;
+    margin: 0 0 14px;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .p-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+    margin: 0 0 32px;
+  }
+  .p-meta .sep { color: var(--rule); margin: 0 10px; }
+  .p-body {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+  .p-body p { margin: 0 0 16px; }
+  .p-body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .p-body em {
+    font-family: var(--display);
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .topics {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.9;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    padding: 18px 0;
+    margin: 0 0 36px;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+  }
+  .topics::before {
+    content: "VOCABULARY · ";
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+  }
+
+  .res-h {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-3);
+    margin: 0 0 4px;
+  }
+  .res {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .res:last-of-type { border-bottom: 1px solid var(--rule); }
+  .res-type {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .res-body { color: var(--ink); }
+  .res-title {
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.35;
+    margin: 0 0 6px;
+  }
+  .res-title a {
+    color: var(--ink);
+    text-decoration: none;
+    background-image: linear-gradient(var(--rule), var(--rule));
+    background-position: 0 100%;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    transition: background-image .2s, color .2s;
+  }
+  .res-title a:hover {
+    color: var(--accent);
+    background-image: linear-gradient(var(--accent), var(--accent));
+  }
+  .res-title a::after {
+    content: " ↗";
+    color: var(--ink-3);
+    font-size: 13px;
+    background: none;
+  }
+  .res-meta {
+    font-family: var(--body);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-3);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .outcome {
+    margin-top: 36px;
+    padding: 22px 26px;
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .outcome strong {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+    font-size: 17px;
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 96px;
+    padding-top: 64px;
+    border-top: 2px solid var(--ink);
+  }
+  .footer h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 42px;
+    line-height: 1.15;
+    margin: 0 0 32px;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    max-width: 680px;
+  }
+  .footer p {
+    color: var(--ink-2);
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0 0 20px;
+  }
+  .principles {
+    margin: 48px 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 24px;
+  }
+  .principles li {
+    padding-left: 60px;
+    position: relative;
+    font-size: 17px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    max-width: 640px;
+  }
+  .principles li::before {
+    content: counter(p-counter, decimal-leading-zero);
+    counter-increment: p-counter;
+    position: absolute;
+    left: 0; top: -2px;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .principles { counter-reset: p-counter; }
+  .principles strong { color: var(--ink); font-weight: 500; display: block; margin-bottom: 4px; font-family: var(--body); font-style: normal; font-size: 18px; }
+
+  .sig {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* MOBILE */
+  @media (max-width: 760px) {
+    body { font-size: 16px; }
+    .wrap { padding: 40px 22px 80px; }
+    .hero { margin-bottom: 56px; }
+    .meta-row { font-size: 10px; gap: 10px; }
+    .hero .lede { font-size: 18px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat { padding: 22px 16px; }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--rule); }
+    .stat-v { font-size: 36px; }
+    .preface { margin: 64px 0 16px; }
+    .preface h2 { font-size: 24px; }
+    .phase {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 64px 0 48px;
+    }
+    .p-num .n { font-size: 88px; }
+    .p-num .label { display: inline-block; border-top: none; padding-top: 0; margin-top: 8px; margin-left: 12px; }
+    .p-content > h2 { font-size: 30px; }
+    .res { grid-template-columns: 1fr; gap: 6px; padding: 16px 0; }
+    .res-type { font-size: 10px; }
+    .footer h2 { font-size: 30px; }
+    .principles li { padding-left: 48px; }
+    .principles li::before { font-size: 26px; }
+  }
+
+  /* SCROLL REVEAL */
+  .phase, .footer, .preface {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .7s ease-out, transform .7s ease-out;
+  }
+  .phase.visible, .footer.visible, .preface.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .phase, .footer, .preface { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; color: black; font-size: 12pt; }
+    .phase { break-inside: avoid; opacity: 1; transform: none; }
+    .res-title a::after { content: ""; }
+    .res-title a { color: black; background: none; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header class="hero">
+  <div class="meta-row">
+    <span>The Roadmap</span>
+    <span>·</span>
+    <span>2026 edition</span>
+    <span>·</span>
+    <span>Calibrated for CS graduates</span>
+    <span>·</span>
+    <span>23 weeks</span>
+  </div>
+  <h1>System design.<br><em>Zero to hero.</em></h1>
+  <p class="lede">A six-month, seven-phase plan that takes a CS graduate from "knows what a load balancer is" to "can design Netflix on a whiteboard under interview pressure." No prerequisites. No fluff. No filler.</p>
+
+  <nav class="toc" aria-label="Roadmap contents">
+    <p class="toc-h">Contents</p>
+    <ol class="toc-list">
+      <li><span class="toc-num">01</span><a href="#p01">The building blocks</a><span class="toc-dur">3 wks</span></li>
+      <li><span class="toc-num">02</span><a href="#p02">Databases under load</a><span class="toc-dur">3 wks</span></li>
+      <li><span class="toc-num">03</span><a href="#p03">Distributed systems</a><span class="toc-dur">6 wks</span></li>
+      <li><span class="toc-num">04</span><a href="#p04">Streams &amp; events</a><span class="toc-dur">3 wks</span></li>
+      <li><span class="toc-num">05</span><a href="#p05">Reliability &amp; ops</a><span class="toc-dur">2 wks</span></li>
+      <li><span class="toc-num">06</span><a href="#p06">Real architectures</a><span class="toc-dur">4 wks</span></li>
+      <li><span class="toc-num">07</span><a href="#p07">Mock interviews</a><span class="toc-dur">2 wks</span></li>
+    </ol>
+  </nav>
+
+  <section class="stats" aria-label="At a glance">
+    <div class="stat"><p class="stat-l">Duration</p><p class="stat-v">23<small>wks</small></p></div>
+    <div class="stat"><p class="stat-l">Phases</p><p class="stat-v">7</p></div>
+    <div class="stat"><p class="stat-l">Resources</p><p class="stat-v">22</p></div>
+    <div class="stat"><p class="stat-l">Mocks</p><p class="stat-v">15<small>+</small></p></div>
+  </section>
+</header>
+
+<section class="preface">
+  <h2>How to read this</h2>
+  <p>Each phase has <strong>one primary resource</strong> — the one you actually study cover-to-cover — and two or three supplementary ones for the inevitable confusion. Don't try to consume all of them in parallel. That's the most common failure mode.</p>
+  <p>The phases assume roughly <strong>10 hours per week</strong>. Less than that and you'll forget Phase 01 by the time you finish Phase 03. More and you'll halve the timeline. Either way, finish a phase before starting the next — the dependencies are real.</p>
+</section>
+
+<!-- PHASE 01 -->
+<section class="phase" id="p01">
+  <h2 class="p-num"><span class="n">01</span><span class="label">Foundations</span></h2>
+  <div class="p-content">
+    <h2>The building blocks</h2>
+    <p class="p-meta">3 weeks<span class="sep">/</span>Required vocabulary</p>
+    <div class="p-body">
+      <p>Every system design conversation assumes fluent vocabulary. You need to casually distinguish a reverse proxy from an API gateway, explain why a write-through cache fails under partition, and compare consistent hashing to range-based sharding without pausing to think.</p>
+      <p>This is the <em>language</em> phase. The goal isn't to design anything yet — it's to make the next phase legible.</p>
+    </div>
+    <p class="topics">Load balancers · L4 vs L7 · Reverse proxies · API gateways · Caching strategies · CDN · Message queues · Pub/sub · Replication · Sharding · Consistent hashing · Indexing · REST vs gRPC vs WebSockets · Long polling vs SSE</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://github.com/donnemartin/system-design-primer" target="_blank" rel="noopener">System Design Primer — donnemartin</a></p>
+        <p class="res-meta">GitHub · free · 280k+ stars. Your primary text. Read top to bottom. Skim the case studies; you'll return in Phase 06.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Video</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.youtube.com/@ByteByteGo" target="_blank" rel="noopener">ByteByteGo — Alex Xu</a></p>
+        <p class="res-meta">YouTube + newsletter · the best visual explanations available anywhere. Watch one video per concept as you encounter it in the Primer.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Video</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.youtube.com/@hnasr" target="_blank" rel="noopener">Hussein Nasser — Backend Engineering</a></p>
+        <p class="res-meta">YouTube · depth where ByteByteGo is breadth. Best for the "but how does it actually work" follow-up questions.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      You can sketch a 5-component web architecture from memory and defend every choice — why this cache, why this protocol, why this database — without hand-waving.
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 02 -->
+<section class="phase" id="p02">
+  <h2 class="p-num"><span class="n">02</span><span class="label">Storage</span></h2>
+  <div class="p-content">
+    <h2>Databases under load</h2>
+    <p class="p-meta">3 weeks<span class="sep">/</span>What the DB actually does</p>
+    <div class="p-body">
+      <p>"SQL or NoSQL" is the most boring database question ever asked and you'll get it in every interview. The interesting question — and the one that separates juniors from seniors — is <em>which kind of NoSQL, and why</em>. That requires knowing what's happening below the query.</p>
+      <p>You'll go from "I use Postgres" to understanding why Postgres uses B-trees, why Cassandra uses LSM trees, why MongoDB's sharding is range-based by default, and what trade-off DynamoDB made when it picked partition keys.</p>
+    </div>
+    <p class="topics">B-tree vs LSM tree · Write-ahead logs · MVCC · Index types · Query planning · Partitioning · Replication topologies · Read replicas · Postgres · MySQL · Cassandra · MongoDB · DynamoDB · Redis · ElasticSearch</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Course</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://15445.courses.cs.cmu.edu/" target="_blank" rel="noopener">CMU 15-445 — Database Systems (Andy Pavlo)</a></p>
+        <p class="res-meta">CMU · free · the gold-standard database internals course. All lectures on YouTube. Watch at 1.25× and your understanding of databases will change permanently.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Book</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.databass.dev/" target="_blank" rel="noopener">Database Internals — Alex Petrov</a></p>
+        <p class="res-meta">O'Reilly · the modern complement to DDIA, focused entirely on storage engines and distributed databases.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://use-the-index-luke.com/" target="_blank" rel="noopener">Use The Index, Luke!</a></p>
+        <p class="res-meta">free · the only resource on SQL indexing you ever need. Read end-to-end in a weekend.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      Given a new product feature, you can pick a database, justify it against two alternatives, design the schema, and predict where it will slow down at 10× scale.
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 03 -->
+<section class="phase" id="p03">
+  <h2 class="p-num"><span class="n">03</span><span class="label">The deep end</span></h2>
+  <div class="p-content">
+    <h2>Distributed systems</h2>
+    <p class="p-meta">6 weeks<span class="sep">/</span>The hardest phase. The most important phase.</p>
+    <div class="p-body">
+      <p>This phase is what separates engineers who <em>memorize</em> system design from engineers who <em>do</em> it. The vocabulary you learned in Phase 01 is the vocabulary of <em>describing</em> systems. The vocabulary here is the vocabulary of <em>reasoning</em> about them — failure modes, partial outages, consensus, partition tolerance.</p>
+      <p>Block out six full weeks. Do not rush. DDIA is the only book in this entire roadmap that you should read twice, with a notebook open the second time. Most engineers who try DDIA give up around Chapter 5 — don't be one of them.</p>
+    </div>
+    <p class="topics">CAP theorem · PACELC · ACID · BASE · Linearizability · Eventual consistency · Consensus · Raft · Paxos · Leader election · Two-phase commit · Sagas · Vector clocks · Lamport timestamps · Distributed transactions · Quorums</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Book</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://dataintensive.net/" target="_blank" rel="noopener">Designing Data-Intensive Applications — Martin Kleppmann</a></p>
+        <p class="res-meta">the bible. Not optional. Read chapters 1–9 carefully; take notes on every diagram. Chapters 10–12 can wait until Phase 04.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Course</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://pdos.csail.mit.edu/6.824/" target="_blank" rel="noopener">MIT 6.824 — Distributed Systems</a></p>
+        <p class="res-meta">Robert Morris · free lectures on YouTube · the labs are in Go and are brutal. Even watching the lectures without doing the labs is transformative.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://jepsen.io/analyses" target="_blank" rel="noopener">Jepsen — Distributed systems analyses</a></p>
+        <p class="res-meta">jepsen.io · free · Kyle Kingsbury breaks real databases under network partitions and writes it up. Read three analyses; you'll never trust a database the same way again.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      You can explain, without notes, why two-phase commit is dangerous, when eventual consistency is actually fine, and what Raft does that Paxos didn't.
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 04 -->
+<section class="phase" id="p04">
+  <h2 class="p-num"><span class="n">04</span><span class="label">Async</span></h2>
+  <div class="p-content">
+    <h2>Streams &amp; event-driven systems</h2>
+    <p class="p-meta">3 weeks<span class="sep">/</span>The async half of modern architecture</p>
+    <div class="p-body">
+      <p>Modern systems are not request-response — they are a request-response shell wrapped around a much larger asynchronous engine. Order placed? Twelve services need to know about it, eventually, exactly once, in roughly the right order. That is not a synchronous problem.</p>
+      <p>Kafka is the dominant tool, so you'll learn Kafka specifically, but the patterns (event sourcing, CQRS, the outbox pattern, idempotent consumers, exactly-once semantics) transfer to anything async.</p>
+    </div>
+    <p class="topics">Kafka · Topics · Partitions · Consumer groups · Pub/sub · Event sourcing · CQRS · Outbox pattern · Idempotency · Exactly-once · Stream processing · Flink · Backpressure</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Book</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.oreilly.com/library/view/kafka-the-definitive/9781492043072/" target="_blank" rel="noopener">Kafka: The Definitive Guide (2nd ed.)</a></p>
+        <p class="res-meta">O'Reilly · written by Confluent engineers. Skip nothing in the first half; skim the second half until you need it.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://developer.confluent.io/" target="_blank" rel="noopener">Confluent Developer</a></p>
+        <p class="res-meta">developer.confluent.io · free hands-on Kafka courses. Run the tutorials locally; don't just read them.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://martin.kleppmann.com/" target="_blank" rel="noopener">Martin Kleppmann's blog</a></p>
+        <p class="res-meta">read his posts on stream processing, event sourcing, and turning the database inside out. They are the conceptual foundation of this entire phase.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      Given a workflow that touches four services, you can decompose it into events, identify where exactly-once matters, and design idempotent consumers without thinking.
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 05 -->
+<section class="phase" id="p05">
+  <h2 class="p-num"><span class="n">05</span><span class="label">Operations</span></h2>
+  <div class="p-content">
+    <h2>Reliability &amp; ops</h2>
+    <p class="p-meta">2 weeks<span class="sep">/</span>The part of system design no one practices</p>
+    <div class="p-body">
+      <p>Most candidates can design a system. Almost none can answer "how would you know it's broken?" or "what happens when this region goes dark?" That is where senior interviews are won or lost.</p>
+      <p>This phase is short but disproportionately high-leverage. Two weeks of SRE principles will visibly change how you talk about every system in Phase 06.</p>
+    </div>
+    <p class="topics">SLO · SLI · SLA · Error budgets · Observability · Metrics · Logs · Traces · Rate limiting · Circuit breakers · Bulkheads · Graceful degradation · Capacity planning · Back-of-envelope math · Multi-region failover</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Book</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://sre.google/books/" target="_blank" rel="noopener">Google SRE Book + SRE Workbook</a></p>
+        <p class="res-meta">sre.google/books · free online. Read the chapters on SLOs, error budgets, and overload. The rest is reference.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Book</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://pragprog.com/titles/mnee2/release-it-second-edition/" target="_blank" rel="noopener">Release It! — Michael Nygard</a></p>
+        <p class="res-meta">2nd ed. · the stability patterns chapter alone is worth the price. Required reading on circuit breakers, bulkheads, and timeout cascades.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="http://highscalability.com/" target="_blank" rel="noopener">High Scalability</a></p>
+        <p class="res-meta">highscalability.com · free · architecture case studies and postmortems going back fifteen years. Skim the recent ones.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      In any design conversation, you proactively bring up SLOs, failure modes, and back-of-envelope capacity math without being asked.
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 06 -->
+<section class="phase" id="p06">
+  <h2 class="p-num"><span class="n">06</span><span class="label">Application</span></h2>
+  <div class="p-content">
+    <h2>Real architectures</h2>
+    <p class="p-meta">4 weeks<span class="sep">/</span>Where everything compounds</p>
+    <div class="p-body">
+      <p>You now know enough to design any system in the world. This phase is about <em>practice</em>. Twelve canonical problems, designed end-to-end on a blank canvas — no looking, no peeking, then compare against the reference.</p>
+      <p>The list: URL shortener · rate limiter · chat (WhatsApp) · news feed (Twitter) · ride sharing (Uber) · video streaming (YouTube) · distributed cache · payments · search (Google) · cloud storage (Dropbox) · ad serving · notification system. Do them in order. Spend two days per problem.</p>
+    </div>
+    <p class="topics">URL shortener · Rate limiter · Chat · News feed · Ride sharing · Video streaming · Distributed cache · Payments · Search · Cloud storage · Ad serving · Notifications</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Book</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://bytebytego.com/" target="_blank" rel="noopener">System Design Interview Vol 1 &amp; 2 — Alex Xu</a></p>
+        <p class="res-meta">ByteByteGo · the two books that contain the canonical interview problems. Try each chapter <em>before</em> reading it; then read it; then redo it from memory.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.hellointerview.com/" target="_blank" rel="noopener">HelloInterview — Guided design walkthroughs</a></p>
+        <p class="res-meta">hellointerview.com · free + paid · the most recommended system design platform of 2025–26. The walkthroughs are written by ex-FAANG staff engineers.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Site</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://netflixtechblog.com/" target="_blank" rel="noopener">Netflix, Uber, Meta, Stripe, Cloudflare engineering blogs</a></p>
+        <p class="res-meta">free · how real production systems are actually built. Pick one company's blog and binge ten posts.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      You can design any of the twelve canonical problems in 45 minutes, on paper, while talking through the trade-offs.
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 07 -->
+<section class="phase" id="p07">
+  <h2 class="p-num"><span class="n">07</span><span class="label">Performance</span></h2>
+  <div class="p-content">
+    <h2>Mock interviews</h2>
+    <p class="p-meta">2 weeks<span class="sep">/</span>Knowing it isn't the same as performing it</p>
+    <div class="p-body">
+      <p>The gap between "I know this material" and "I can perform it under interview pressure with a stranger nitpicking me" is enormous. Closing that gap is the entire purpose of this phase.</p>
+      <p>Do <strong>at least one mock per day</strong> for two weeks. Record yourself. Watch the recording — it will be excruciating, and that's how you improve. Vary the format: AI mocks for volume, peer mocks for realism, paid mocks with engineers for the final calibration.</p>
+    </div>
+    <p class="topics">Time management · Requirements clarification · Capacity estimation · Communicating trade-offs · Handling deep dives · Drawing under pressure · L5 vs L6 expectations · Senior &amp; Staff signals</p>
+
+    <p class="res-h">Resources</p>
+    <article class="res">
+      <span class="res-type">Mocks</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.hellointerview.com/" target="_blank" rel="noopener">HelloInterview AI mock interviewer</a></p>
+        <p class="res-meta">unlimited AI-driven mocks with instant feedback. Best for volume in week one.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Mocks</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.pramp.com/" target="_blank" rel="noopener">Pramp — peer mocks</a></p>
+        <p class="res-meta">pramp.com · free · pair with another candidate, one hour each, alternating interviewer and interviewee. The interviewer side teaches you almost as much as the interviewee side.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Mocks</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://interviewing.io/" target="_blank" rel="noopener">Interviewing.io — anonymous mocks with FAANG engineers</a></p>
+        <p class="res-meta">paid · the closest thing to a real loop interview. Do two before any real interview.</p>
+      </div>
+    </article>
+    <article class="res">
+      <span class="res-type">Video</span>
+      <div class="res-body">
+        <p class="res-title"><a href="https://www.youtube.com/@tryexponent" target="_blank" rel="noopener">Exponent — Recorded mock interviews</a></p>
+        <p class="res-meta">YouTube · free · watch real candidates solve real problems. Pause every five minutes and predict what you would say next.</p>
+      </div>
+    </article>
+
+    <div class="outcome">
+      <strong>Exit criterion</strong>
+      Strangers describe your mocks as "confident, structured, and clear." You stop dreading the question "how would you scale this?" and start enjoying it.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section class="footer">
+  <h2>A few honest things, before you start.</h2>
+  <p>The roadmap above is calibrated for ten hours per week of focused study. Less than that and you'll forget Phase 01 by the time you finish Phase 03. More and you'll halve the timeline. There is no shortcut.</p>
+
+  <ol class="principles">
+    <li><strong>One primary resource per phase.</strong> Pick it, finish it, then move on. Reading the System Design Primer <em>and</em> watching ByteByteGo <em>and</em> reading DDIA in parallel is how people study for six months and learn nothing.</li>
+    <li><strong>Diagram on paper.</strong> Watching a video is passive. Redrawing the diagram from memory ten minutes later is what makes it stick. If you cannot redraw it, you do not understand it.</li>
+    <li><strong>Start mock interviews in Phase 02.</strong> Not Phase 07. You will be bad. That is the point. The gap between "knows it" and "can perform it" is its own skill, and it takes months — not weeks — to close.</li>
+    <li><strong>Pick one company's engineering blog and binge it.</strong> Ten posts deep from Netflix or Uber will teach you more about real architecture than a hundred surface-level YouTube videos.</li>
+    <li><strong>Quit DDIA if you must, but come back.</strong> Most engineers give up around Chapter 5. The chapter on replication is where the book opens up. Push through.</li>
+  </ol>
+
+  <p>If you do this honestly, in six months you will not just pass system design interviews — you will <em>enjoy</em> them. That is the actual goal.</p>
+
+  <div class="sig">
+    <span>Roadmap · 2026 edition</span>
+    <span>Hyderabad / Anywhere</span>
+  </div>
+</section>
+
+</main>
+<script>
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -80px 0px', threshold: 0.05 });
+    document.querySelectorAll('.phase, .footer, .preface').forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll('.phase, .footer, .preface').forEach((el) => el.classList.add('visible'));
+  }
+</script>
+</body>
+</html>
